@@ -2,10 +2,16 @@
 @import "./ldbtn.scss";
 @import "./loading.scss";
 
+// COLOR SYTEM
 $primary-theme: #7B81FF;
+$primary-theme-light: #e8e9ff;
+$primary-theme-dark: #6029A8;
 $secondary-theme: #FFBB7B;
+$secondary-theme-light: #FCE3B1;
+$secondary-theme-dark: #F9C784;
+
 $secondary-dark-theme: #262867;
-$text-red: #F24D4D;
+$error-red: #F24D4D;
 $footer-color:#413f57;
 $footer-text-color: rgb(183, 183, 192);
 $footer-text-color-accent: rgb(230, 230, 230);
@@ -208,7 +214,7 @@ thead {
 }
 
 .red-star {
-	color: $text-red
+	color: $error-red
 }
 
 .form-purple {
@@ -569,3 +575,38 @@ div.scrollbar {
 	@include scrollbars(0.75rem, $primary-theme, #ffffff);
 }
 
+.alert-provider-custom div div {
+	background-color: #F3F3F3 !important;
+	color: #212529 !important;
+	border-radius: .25rem !important;
+	border-color: #B7B7C0 !important;
+	border-style: solid !important;
+	border-width: .125rem !important;
+	min-width: 18.75rem !important;
+	font-family: 'Inter', sans-serif !important;
+	font-size: 1rem !important;
+	width: 33vw !important;
+}
+
+.alert-provider-custom div div button svg{
+	filter: invert(47%) sepia(13%) saturate(298%) hue-rotate(166deg) brightness(93%) contrast(91%) !important;
+	// fill: #6C757D !important;
+}
+
+.border-red {
+	border-width: .125rem;
+	border-color: $error-red;
+}
+
+.banner-error-icon {
+	width: 1.75rem;
+	height: 1.75rem;
+	filter: invert(45%) sepia(44%) saturate(3961%) hue-rotate(334deg) brightness(99%) contrast(92%);
+}
+
+// .card {
+// 	border-radius: .25rem;
+// 	border-width: 0.0625;
+// 	border-color: grey;
+// 	box-shadow: 0rem 0.4475rem 0.85rem 0rem rgba(0, 0, 0, 0.2); 
+// }

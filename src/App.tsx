@@ -1,18 +1,18 @@
-import React from "react";
+import React from 'react';
 import {
   BrowserRouter as Router,
   Route,
   Redirect,
   Switch,
-} from "react-router-dom";
-import "./static/styles/App.scss";
-import { Helmet } from "react-helmet";
-import Header from "./components/Header";
-import Error from "./components/Error";
-import Footer from "./components/Footer";
-import getServerURL from "./serverOverride";
-import LoginPage from "./components/LoginPage";
-import LandingPage from "./components/LandingPages/LandingPage";
+} from 'react-router-dom';
+import './static/styles/App.scss';
+import { Helmet } from 'react-helmet';
+import Header from './components/Header';
+import Error from './components/Error';
+import Footer from './components/Footer';
+import getServerURL from './serverOverride';
+import LoginPage from './components/LoginPage';
+import LandingPage from './components/LandingPages/LandingPage';
 
 interface State {
   isLoggedIn: boolean;
@@ -22,7 +22,7 @@ class App extends React.Component<{}, State, {}> {
   constructor(props: {}) {
     super(props);
     this.state = {
-      isLoggedIn: false,
+      isLoggedIn: true,
     };
   }
 
@@ -30,8 +30,8 @@ class App extends React.Component<{}, State, {}> {
     this.setState({ isLoggedIn });
     if (!isLoggedIn) {
       fetch(`${getServerURL()}/logout`, {
-        method: "GET",
-        credentials: "include",
+        method: 'GET',
+        credentials: 'include',
       });
     }
   };
@@ -49,27 +49,26 @@ class App extends React.Component<{}, State, {}> {
                 content="Securely Combating Homelessness"
               />
             </Helmet>
-            <Header isLoggedIn={isLoggedIn} />
+            <Header
+              isLoggedIn={isLoggedIn}
+              setLoginState={this.setLoginState}
+            />
             <Switch>
               <Route exact path="/" render={() => <Redirect to="/login" />} />
               <Route
                 path="/home"
-                render={() =>
-                  isLoggedIn ? <LandingPage /> : <Redirect to="/login" />
-                }
+                render={() => (isLoggedIn ? <LandingPage /> : <Redirect to="/login" />)}
               />
               <Route
                 path="/login"
-                render={() =>
-                  isLoggedIn ? (
-                    <Redirect to="/home" />
-                  ) : (
-                    <LoginPage
-                      isLoggedIn={isLoggedIn}
-                      setLoginState={this.setLoginState}
-                    />
-                  )
-                }
+                render={() => (isLoggedIn ? (
+                  <Redirect to="/home" />
+                ) : (
+                  <LoginPage
+                    isLoggedIn={isLoggedIn}
+                    setLoginState={this.setLoginState}
+                  />
+                ))}
               />
               <Route path="/error">
                 <Error />

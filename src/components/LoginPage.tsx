@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Helmet } from 'react-helmet';
 import { withAlert } from 'react-alert';
 import ReCAPTCHA from 'react-google-recaptcha';
-import { Link } from 'react-router-dom';
 import getServerURL from '../serverOverride';
 import LoginSVG from '../static/images/login-svg.svg';
 import { reCaptchaKey } from '../configVars';
@@ -23,6 +22,12 @@ interface Props {
 }
 
 class LoginPage extends Component<Props, State> {
+  static enterKeyPressed(event, funct) {
+    if (event.key === 'Enter') {
+      funct();
+    }
+  }
+
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -33,14 +38,7 @@ class LoginPage extends Component<Props, State> {
     };
   }
 
-  onSubmitWithReCAPTCHA = async (e) => {
-    e.preventDefault();
-    if (recaptchaRef !== null && recaptchaRef.current !== null) {
-      const recaptchaPayload = await recaptchaRef.current.executeAsync();
-      this.setState({ recaptchaPayload }, this.handleLogin);
-    }
-  }
-
+  // event handlers- whenever an action happens, update the state
   handleChangePassword = (event: any) => {
     this.setState({ password: event.target.value });
   }
@@ -49,10 +47,27 @@ class LoginPage extends Component<Props, State> {
     this.setState({ username: event.target.value });
   }
 
+  // recaptcha specific code: see https://github.com/dozoisch/react-google-recaptcha
+  onSubmitWithReCAPTCHA = async (e) => {
+    e.preventDefault();
+    if (recaptchaRef !== null && recaptchaRef.current !== null) {
+      const recaptchaPayload = await recaptchaRef.current.executeAsync();
+      this.setState({ recaptchaPayload }, this.handleLogin);
+    }
+  }
+
+  resetRecaptcha = (): void => {
+    if (recaptchaRef !== null && recaptchaRef.current !== null) {
+      recaptchaRef.current.reset();
+    }
+    this.setState({ recaptchaPayload: '' });
+  }
+
   handleLogin = (): void => {
     this.setState({ buttonState: 'running' });
     const {
-      logIn,
+      setLogInState,
+      alert,
     } = this.props;
     const {
       username,
@@ -73,33 +88,25 @@ class LoginPage extends Component<Props, State> {
         }),
       }).then((response) => response.json())
         .then((responseJSON) => {
-          const responseObject = JSON.parse(responseJSON);
           const {
             status,
-          } = responseObject;
-
+          } = responseJSON;
           if (status === 'AUTH_SUCCESS') {
-            logIn(true); 
-          } else if (status === 'AUTH_FAILURE') {
-            this.props.alert.show('Incorrect Username or Password');
+            setLogInState(true);
+          } else if (status === 'AUTH_FAILURE' || status === 'USER_NOT_FOUND') {
+            alert.show('Incorrect Username or Password');
             this.setState({ buttonState: '' });
-          } else if (status === 'USER_NOT_FOUND') {
-            this.props.alert.show('Incorrect Username or Password');
-            this.setState({ buttonState: '' });
+            this.resetRecaptcha();
           } else {
-            this.props.alert.show('Server Failure: Please Try Again');
+            alert.show('Server Failure: Please Try Again');
             this.setState({ buttonState: '' });
+            this.resetRecaptcha();
           }
-        }).catch((error) => {
-          this.props.alert.show('Network Failure: Check Server Connection');
+        }).catch(() => {
+          alert.show('Network Failure: Check Server Connection');
           this.setState({ buttonState: '' });
+          this.resetRecaptcha();
         });
-    }
-  }
-
-  static enterKeyPressed(event, funct) {
-    if (event.key === 'Enter') {
-      funct();
     }
   }
 
@@ -160,26 +167,30 @@ class LoginPage extends Component<Props, State> {
                     required
                   />
                 </label>
-                <div className="row pl-3 pb-3">
-                  <Link to="/forgot-password" className="text-decoration-none">
-                    <span className="">Forgot your password?</span>
-                  </Link>
-                </div>
-                <div className="row pl-3 pb-1">
-                  <span className="pt-3">
-                    Don&apos;t have an account?
-                  </span>
-                </div>
               </form>
+              <div className="row pl-3 pt-3">
+                <div className="pb-2">
+                  <button
+                    type="submit"
+                    onKeyDown={(e) => LoginPage.enterKeyPressed(e, this.onSubmitWithReCAPTCHA)}
+                    onClick={this.onSubmitWithReCAPTCHA}
+                    className={`btn btn-success px-5 loginButtonBackground w-100 ld-ext-right ${this.state.buttonState}`}
+                  >
+                    Sign In
+                    <div className="ld ld-ring ld-spin" />
+                  </button>
+                </div>
+              </div>
             </div>
+
           </div>
+          <ReCAPTCHA
+            theme="dark"
+            size="invisible"
+            ref={recaptchaRef}
+            sitekey={reCaptchaKey}
+          />
         </div>
-        <ReCAPTCHA
-          theme="dark"
-          size="invisible"
-          ref={recaptchaRef}
-          sitekey={reCaptchaKey}
-        />
       </div>
     );
   }
