@@ -22,7 +22,7 @@ class App extends React.Component<{}, State, {}> {
   constructor(props: {}) {
     super(props);
     this.state = {
-      isLoggedIn: true,
+      isLoggedIn: false,
     };
   }
 
