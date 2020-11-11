@@ -27,11 +27,10 @@
         "import/extensions": "off",
         "react/jsx-filename-extension": "off",
         "no-alert": 1,
-        "no-unused-vars": 1,
         "import/no-duplicates": 1,
         "import/no-unresolved": "off",
         "max-len": "off",
-        "react/prefer-stateless-function": 1,
+        "react/prefer-stateless-function": "off",
         "react/sort-comp": 1,
         "jsx-a11y/label-has-associated-control": 1,
         "react/destructuring-assignment": 1,
@@ -41,6 +40,6 @@
         "jsx-a11y/anchor-is-valid": 1,
         "react/no-did-update-set-state": "off",
         "max-classes-per-file": 1,
-        "no-unused-vars": "off"
+        "no-unused-vars": "off" 
     }
 }

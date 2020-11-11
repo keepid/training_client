@@ -23,7 +23,7 @@ class ClientLanding extends Component<{}, {}, {}> {
 
         <h1 className="pt-2">Welcome Connor Chong</h1>
         <div className="progress my-4">
-          <div className="progress-bar" role="progressbar" aria-valuenow={0} aria-valuemin={0} aria-valuemax={100} />
+          <div className="progress-bar" role="progressbar" aria-valuenow={0} aria-valuemin={0} aria-valuemax={100} alt="progress bar that fills up" />
         </div>
         <div className="row justify-content-between pb-4 mx-0">
           <button type="button" className="btn btn-outline-primary text-right">Next Step</button>
