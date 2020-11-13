@@ -17,7 +17,7 @@ class ClientLanding extends Component<{}, {}, {}> {
           <img src={ErrorSVG} className="banner-error-icon mr-2 float-left" alt="red error exclamation" />
           <div>
             <div className="font-weight-bold">The Fire Nation has attacked!</div>
-            Fire Lord Ozai has attacked the Earth Kingdom. Try performing the action again.
+            <div>Fire Lord Ozai has attacked the Earth Kingdom. Try performing the action again.</div>
           </div>
         </div>
 
